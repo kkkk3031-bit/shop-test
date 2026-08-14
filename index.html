@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -187,7 +187,7 @@
       <a href="#deals">Deals</a>
     </nav>
     <div class="navright">
-      <button class="lang-toggle" id="langBtn">عربي</button>
+      <button class="lang-toggle" id="langBtn">English</button>
       <button class="cart-btn" id="cartBtn">
         🛒 Cart <span class="cart-count" id="cartCount">0</span>
       </button>
@@ -199,14 +199,14 @@
   <div class="wrap">
     <div class="badge"><span class="dot"></span> TEST STORE — DEMO DATA</div>
     <h1 data-en='Shop the drop.<br><span class="accent">Fast, bold, yours.</span>' data-ar='تسوق أحدث المنتجات.<br><span class="accent">سريع وجريء ولك.</span>'>
-      Shop the drop.<br><span class="accent">Fast, bold, yours.</span>
+      تسوق أحدث المنتجات.<br><span class="accent">سريع وجريء ولك.</span>
     </h1>
     <p class="sub" data-en="A test storefront — everything below is demo inventory. Add items to the cart to see it in action." data-ar="متجر تجريبي — كل ما يظهر أدناه منتجات وهمية. أضف عناصر للسلة لتجربتها.">
-      A test storefront — everything below is demo inventory. Add items to the cart to see it in action.
+      متجر تجريبي — كل ما يظهر أدناه منتجات وهمية. أضف عناصر للسلة لتجربتها.
     </p>
     <div class="hero-cta">
-      <button class="btn btn-primary" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})" data-en="Browse Products" data-ar="تصفح المنتجات">Browse Products</button>
-      <a href="#deals" class="btn btn-ghost" data-en="View Deals" data-ar="أحدث العروض">View Deals</a>
+      <button class="btn btn-primary" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})" data-en="Browse Products" data-ar="تصفح المنتجات">تصفح المنتجات</button>
+      <a href="#deals" class="btn btn-ghost" data-en="View Deals" data-ar="أحدث العروض">أحدث العروض</a>
     </div>
   </div>
 </section>
@@ -214,7 +214,7 @@
 <section class="section" id="shop">
   <div class="wrap">
     <div class="section-head">
-      <h2 data-en="Featured Products" data-ar="منتجات مميزة">Featured Products</h2>
+      <h2 data-en="Featured Products" data-ar="منتجات مميزة">منتجات مميزة</h2>
       <span class="tag" id="itemCountTag">8 items</span>
     </div>
     <div class="grid" id="productGrid"></div>
@@ -225,7 +225,7 @@
   <div class="wrap foot-row">
     <div>
       <div class="foot-brand">NOVA</div>
-      <div class="foot-note" data-en="Test shop built for demo purposes. No real payments." data-ar="متجر تجريبي لأغراض العرض فقط. لا توجد مدفوعات حقيقية.">Test shop built for demo purposes. No real payments.</div>
+      <div class="foot-note" data-en="Test shop built for demo purposes. No real payments." data-ar="متجر تجريبي لأغراض العرض فقط. لا توجد مدفوعات حقيقية.">متجر تجريبي لأغراض العرض فقط. لا توجد مدفوعات حقيقية.</div>
     </div>
     <div class="foot-links">
       <a href="https://discord.gg/zbHbSsCUua" title="Discord">💬</a>
@@ -238,16 +238,16 @@
 <div class="overlay" id="overlay"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-head">
-    <h3 data-en="Your Cart" data-ar="سلتك">Your Cart</h3>
+    <h3 data-en="Your Cart" data-ar="سلتك">سلتك</h3>
     <button class="drawer-close" id="drawerClose">✕</button>
   </div>
   <div class="drawer-items" id="drawerItems"></div>
   <div class="drawer-foot">
     <div class="drawer-total">
-      <span data-en="Total" data-ar="الإجمالي">Total</span>
+      <span data-en="Total" data-ar="الإجمالي">الإجمالي</span>
       <span class="amt" id="drawerTotal">$0.00</span>
     </div>
-    <button class="btn btn-primary checkout-btn" id="checkoutBtn" data-en="Checkout" data-ar="إتمام الشراء">Checkout</button>
+    <button class="btn btn-primary checkout-btn" id="checkoutBtn" data-en="Checkout" data-ar="إتمام الشراء">إتمام الشراء</button>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -255,7 +255,7 @@
 <script>
 let PRODUCTS = [];
 let CART = { items: [], total_cents: 0 }; // mirrors the server's real state after every call
-let currentLang = 'en';
+let currentLang = 'ar';
 
 function fmt(cents){ return '$' + (cents / 100).toFixed(2); }
 
@@ -392,16 +392,24 @@ document.getElementById('cartBtn').onclick = openDrawer;
 document.getElementById('drawerClose').onclick = closeDrawer;
 document.getElementById('overlay').onclick = closeDrawer;
 
-document.getElementById('langBtn').onclick = () => {
-  currentLang = currentLang === 'en' ? 'ar' : 'en';
-  document.documentElement.lang = currentLang;
-  document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-  document.getElementById('langBtn').textContent = currentLang === 'ar' ? 'English' : 'عربي';
+function applyLang(lang){
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.getElementById('langBtn').textContent = lang === 'ar' ? 'English' : 'عربي';
   document.querySelectorAll('[data-en]').forEach(el => {
-    el.innerHTML = currentLang === 'ar' ? el.dataset.ar : el.dataset.en;
+    el.innerHTML = lang === 'ar' ? el.dataset.ar : el.dataset.en;
   });
   renderCart();
+}
+
+document.getElementById('langBtn').onclick = () => {
+  applyLang(currentLang === 'en' ? 'ar' : 'en');
 };
+
+// Arabic by default (Gulf-first audience) — remembers the last explicit choice.
+applyLang(localStorage.getItem('lang') || 'ar');
 
 loadProducts();
 loadCart();
