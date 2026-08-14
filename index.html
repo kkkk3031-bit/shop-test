@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA — Test Shop</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛒</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --amber:#f59e0b; --amber-deep:#b45309; --amber-dim:#92400e; --amber-glow:rgba(245,158,11,.18);
+    --ink-950:#050709; --ink-900:#07090f; --ink-850:#0a0d17; --ink-800:#0e1320; --ink-700:#161c2c; --ink-600:#1e2538;
+    --line:rgba(255,255,255,.06); --line-strong:rgba(255,255,255,.1);
+    --text-strong:#fff; --text:#e8ecf3; --text-muted:#8b92a7; --text-faint:#5a6178;
+    --red:#f43f5e; --green:#34d399;
+    --font:"Inter Tight","Inter",Tajawal,ui-sans-serif,system-ui,sans-serif;
+    --font-mono:"JetBrains Mono",ui-monospace,monospace;
+    --radius:12px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink-950); color:var(--text); font-family:var(--font);
+    font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(ellipse 900px 500px at 15% -10%, var(--amber-glow), transparent),
+      radial-gradient(ellipse 700px 400px at 100% 20%, rgba(245,158,11,.08), transparent);
+    background-attachment:fixed;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+
+  /* ---- header ---- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(7,9,15,.72); backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex; align-items:center; justify-content:space-between; height:68px;}
+  .brand{display:flex; align-items:center; gap:10px; font-weight:800; font-size:19px; letter-spacing:-.02em;}
+  .brand .mark{
+    width:32px; height:32px; border-radius:9px; background:linear-gradient(135deg,var(--amber),var(--amber-deep));
+    display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:800; color:var(--ink-950);
+    box-shadow:0 0 0 1px var(--amber-glow), 0 0 20px -4px var(--amber-glow);
+  }
+  .navlinks{display:flex; gap:32px; font-size:14px; font-weight:500; color:var(--text-muted);}
+  .navlinks a:hover{color:var(--text-strong);}
+  .navright{display:flex; align-items:center; gap:16px;}
+  .lang-toggle{
+    font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--text-muted);
+    border:1px solid var(--line-strong); border-radius:8px; padding:7px 12px; cursor:pointer; background:transparent;
+  }
+  .lang-toggle:hover{color:var(--text-strong); border-color:var(--amber-dim);}
+  .cart-btn{
+    position:relative; display:flex; align-items:center; gap:8px;
+    background:var(--amber); color:var(--ink-950); font-weight:700; font-size:14px;
+    border:none; border-radius:9px; padding:10px 16px; cursor:pointer;
+    box-shadow:0 4px 16px -4px var(--amber-glow);
+  }
+  .cart-btn:hover{background:#fbbf24;}
+  .cart-count{
+    position:absolute; top:-7px; right:-7px; background:var(--red); color:#fff;
+    font-size:11px; font-weight:700; min-width:18px; height:18px; border-radius:999px;
+    display:flex; align-items:center; justify-content:center; padding:0 4px;
+  }
+
+  /* ---- hero ---- */
+  .hero{padding:88px 0 64px; text-align:center;}
+  .badge{
+    display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:12px;
+    color:var(--amber); border:1px solid var(--amber-dim); background:rgba(245,158,11,.06);
+    border-radius:999px; padding:6px 14px; margin-bottom:24px;
+  }
+  .badge .dot{width:6px; height:6px; border-radius:999px; background:var(--amber); box-shadow:0 0 8px var(--amber);}
+  h1{font-size:56px; font-weight:800; letter-spacing:-.03em; line-height:1.08; color:var(--text-strong);}
+  h1 .accent{color:var(--amber);}
+  .sub{max-width:520px; margin:20px auto 0; color:var(--text-muted); font-size:17px;}
+  .hero-cta{display:flex; gap:12px; justify-content:center; margin-top:32px;}
+  .btn{
+    font-weight:700; font-size:14.5px; border-radius:10px; padding:13px 24px; cursor:pointer; border:1px solid transparent;
+  }
+  .btn-primary{background:var(--amber); color:var(--ink-950); box-shadow:0 8px 24px -8px var(--amber-glow);}
+  .btn-primary:hover{background:#fbbf24;}
+  .btn-ghost{background:transparent; color:var(--text); border-color:var(--line-strong);}
+  .btn-ghost:hover{border-color:var(--amber-dim); color:var(--amber);}
+
+  /* ---- section headings ---- */
+  .section{padding:56px 0;}
+  .section-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:28px;}
+  .section-head h2{font-size:24px; font-weight:700; letter-spacing:-.01em;}
+  .section-head .tag{font-family:var(--font-mono); font-size:12px; color:var(--text-faint);}
+
+  /* ---- product grid ---- */
+  .grid{display:grid; grid-template-columns:repeat(4,1fr); gap:18px;}
+  .card{
+    background:var(--ink-850); border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden; transition:border-color .15s, transform .15s;
+  }
+  .card:hover{border-color:var(--amber-dim); transform:translateY(-3px);}
+  .card-media{
+    aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; font-size:52px;
+    position:relative; overflow:hidden;
+  }
+  .card-body{padding:16px;}
+  .card-cat{font-family:var(--font-mono); font-size:10.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.05em;}
+  .card-name{font-weight:600; font-size:15px; margin:5px 0 8px; color:var(--text-strong);}
+  .card-row{display:flex; align-items:center; justify-content:space-between;}
+  .card-price{font-family:var(--font-mono); font-weight:700; font-size:16px; color:var(--amber);}
+  .card-price .was{font-family:var(--font); font-weight:400; color:var(--text-faint); text-decoration:line-through; font-size:12.5px; margin-inline-start:6px;}
+  .add-btn{
+    width:32px; height:32px; border-radius:8px; border:1px solid var(--line-strong); background:var(--ink-800);
+    color:var(--text); font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:.15s;
+  }
+  .add-btn:hover{background:var(--amber); color:var(--ink-950); border-color:var(--amber);}
+  .add-btn.added{background:var(--green); color:var(--ink-950); border-color:var(--green);}
+
+  /* ---- footer ---- */
+  footer{border-top:1px solid var(--line); padding:40px 0 32px; margin-top:40px;}
+  .foot-row{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;}
+  .foot-brand{font-weight:700; color:var(--text-strong); font-size:15px;}
+  .foot-note{font-size:12.5px; color:var(--text-faint); margin-top:4px;}
+  .foot-links{display:flex; gap:18px;}
+  .foot-links a{
+    width:36px; height:36px; border-radius:9px; border:1px solid var(--line-strong);
+    display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:15px;
+  }
+  .foot-links a:hover{color:var(--amber); border-color:var(--amber-dim);}
+
+  /* ---- cart drawer ---- */
+  .overlay{
+    position:fixed; inset:0; background:rgba(5,7,9,.6); backdrop-filter:blur(2px);
+    opacity:0; pointer-events:none; transition:opacity .2s; z-index:90;
+  }
+  .overlay.open{opacity:1; pointer-events:auto;}
+  .drawer{
+    position:fixed; top:0; right:0; height:100%; width:380px; max-width:92vw;
+    background:var(--ink-900); border-left:1px solid var(--line-strong);
+    transform:translateX(100%); transition:transform .25s ease; z-index:91;
+    display:flex; flex-direction:column;
+  }
+  .drawer.open{transform:translateX(0);}
+  .drawer-head{display:flex; align-items:center; justify-content:space-between; padding:20px 22px; border-bottom:1px solid var(--line);}
+  .drawer-head h3{font-size:16px; font-weight:700;}
+  .drawer-close{background:none; border:none; color:var(--text-muted); font-size:20px; cursor:pointer;}
+  .drawer-items{flex:1; overflow-y:auto; padding:16px 22px;}
+  .drawer-item{display:flex; gap:12px; align-items:center; padding:12px 0; border-bottom:1px solid var(--line);}
+  .drawer-item .di-icon{width:44px; height:44px; border-radius:8px; background:var(--ink-800); display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;}
+  .drawer-item .di-name{font-size:13.5px; font-weight:600;}
+  .drawer-item .di-price{font-family:var(--font-mono); font-size:12.5px; color:var(--amber); margin-top:2px;}
+  .di-qty{margin-inline-start:auto; display:flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:13px; color:var(--text-muted);}
+  .empty-cart{color:var(--text-faint); font-size:13.5px; text-align:center; padding:40px 0;}
+  .drawer-foot{padding:20px 22px; border-top:1px solid var(--line);}
+  .drawer-total{display:flex; justify-content:space-between; font-weight:700; margin-bottom:14px;}
+  .drawer-total .amt{font-family:var(--font-mono); color:var(--amber);}
+  .checkout-btn{width:100%;}
+
+  .toast{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--ink-800); border:1px solid var(--amber-dim); color:var(--text);
+    padding:11px 20px; border-radius:10px; font-size:13.5px; font-weight:500;
+    opacity:0; pointer-events:none; transition:.2s; z-index:100;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+  [dir="rtl"] body{font-family:Tajawal,var(--font);}
+  [dir="rtl"] .di-qty{margin-inline-start:0; margin-inline-end:auto;}
+
+  @media(max-width:900px){
+    .grid{grid-template-columns:repeat(2,1fr);}
+    h1{font-size:38px;}
+    .navlinks{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand"><span class="mark">N</span><span>NOVA</span></div>
+    <nav class="navlinks">
+      <a href="#shop">Shop</a>
+      <a href="#new">New In</a>
+      <a href="#deals">Deals</a>
+    </nav>
+    <div class="navright">
+      <button class="lang-toggle" id="langBtn">عربي</button>
+      <button class="cart-btn" id="cartBtn">
+        🛒 Cart <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="badge"><span class="dot"></span> TEST STORE — DEMO DATA</div>
+    <h1 data-en='Shop the drop.<br><span class="accent">Fast, bold, yours.</span>' data-ar='تسوق أحدث المنتجات.<br><span class="accent">سريع وجريء ولك.</span>'>
+      Shop the drop.<br><span class="accent">Fast, bold, yours.</span>
+    </h1>
+    <p class="sub" data-en="A test storefront — everything below is demo inventory. Add items to the cart to see it in action." data-ar="متجر تجريبي — كل ما يظهر أدناه منتجات وهمية. أضف عناصر للسلة لتجربتها.">
+      A test storefront — everything below is demo inventory. Add items to the cart to see it in action.
+    </p>
+    <div class="hero-cta">
+      <button class="btn btn-primary" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})" data-en="Browse Products" data-ar="تصفح المنتجات">Browse Products</button>
+      <a href="#deals" class="btn btn-ghost" data-en="View Deals" data-ar="أحدث العروض">View Deals</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="shop">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 data-en="Featured Products" data-ar="منتجات مميزة">Featured Products</h2>
+      <span class="tag" id="itemCountTag">8 items</span>
+    </div>
+    <div class="grid" id="productGrid"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-row">
+    <div>
+      <div class="foot-brand">NOVA</div>
+      <div class="foot-note" data-en="Test shop built for demo purposes. No real payments." data-ar="متجر تجريبي لأغراض العرض فقط. لا توجد مدفوعات حقيقية.">Test shop built for demo purposes. No real payments.</div>
+    </div>
+    <div class="foot-links">
+      <a href="https://discord.gg/zbHbSsCUua" title="Discord">💬</a>
+      <a href="https://x.com/KhaledQ84Ever" title="X">𝕏</a>
+      <a href="https://wa.me/96555828769" title="WhatsApp">📱</a>
+    </div>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h3 data-en="Your Cart" data-ar="سلتك">Your Cart</h3>
+    <button class="drawer-close" id="drawerClose">✕</button>
+  </div>
+  <div class="drawer-items" id="drawerItems"></div>
+  <div class="drawer-foot">
+    <div class="drawer-total">
+      <span data-en="Total" data-ar="الإجمالي">Total</span>
+      <span class="amt" id="drawerTotal">$0.00</span>
+    </div>
+    <button class="btn btn-primary checkout-btn" id="checkoutBtn" data-en="Checkout" data-ar="إتمام الشراء">Checkout</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let PRODUCTS = [];
+let CART = { items: [], total_cents: 0 }; // mirrors the server's real state after every call
+let currentLang = 'en';
+
+function fmt(cents){ return '$' + (cents / 100).toFixed(2); }
+
+async function api(path, opts){
+  const res = await fetch(path, {
+    method: opts?.method || 'GET',
+    headers: opts?.body ? { 'Content-Type': 'application/json' } : undefined,
+    body: opts?.body ? JSON.stringify(opts.body) : undefined,
+  });
+  if (!res.ok){
+    const err = await res.json().catch(() => ({ error: 'Request failed' }));
+    throw new Error(err.error || 'Request failed');
+  }
+  return res.json();
+}
+
+async function loadProducts(){
+  const data = await api('/api/products');
+  PRODUCTS = data.products;
+  renderProducts();
+}
+
+async function loadCart(){
+  CART = await api('/api/cart');
+  renderCart();
+}
+
+function renderProducts(){
+  const grid = document.getElementById('productGrid');
+  grid.innerHTML = PRODUCTS.map(p => `
+    <div class="card">
+      <div class="card-media" style="background:${p.bg}">${p.icon}</div>
+      <div class="card-body">
+        <div class="card-cat">${p.category}</div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-row">
+          <div class="card-price">${fmt(p.price_cents)}${p.was_cents ? `<span class="was">${fmt(p.was_cents)}</span>` : ''}</div>
+          <button class="add-btn" id="add-${p.id}" onclick="addToCart(${p.id})">+</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('itemCountTag').textContent = PRODUCTS.length + ' items';
+}
+
+async function addToCart(id){
+  const btn = document.getElementById('add-' + id);
+  btn.disabled = true;
+  try {
+    CART = await api('/api/cart/add', { method: 'POST', body: { productId: id, qty: 1 } });
+    btn.classList.add('added');
+    btn.textContent = '✓';
+    setTimeout(() => { btn.classList.remove('added'); btn.textContent = '+'; btn.disabled = false; }, 700);
+    const p = PRODUCTS.find(x => x.id === id);
+    showToast((currentLang === 'ar' ? 'أُضيف: ' : 'Added: ') + p.name);
+    renderCart();
+  } catch (e) {
+    btn.disabled = false;
+    showToast(e.message);
+  }
+}
+
+async function changeQty(id, delta){
+  const current = CART.items.find(i => i.product_id === id);
+  const newQty = (current?.qty || 0) + delta;
+  try {
+    CART = await api('/api/cart/update', { method: 'POST', body: { productId: id, qty: newQty } });
+    renderCart();
+  } catch (e) {
+    showToast(e.message);
+  }
+}
+
+async function doCheckout(){
+  if (!CART.items.length) return;
+  const btn = document.getElementById('checkoutBtn');
+  btn.disabled = true;
+  try {
+    const order = await api('/api/checkout', { method: 'POST' });
+    showToast((currentLang === 'ar' ? 'تم الطلب! رقم الطلب: ' : 'Order placed! #') + order.order_id.slice(0, 8));
+    await loadCart();
+    closeDrawer();
+  } catch (e) {
+    showToast(e.message);
+  } finally {
+    btn.disabled = false;
+  }
+}
+document.getElementById('checkoutBtn').onclick = doCheckout;
+
+function renderCart(){
+  const items = CART.items || [];
+  const count = items.reduce((s,i) => s + i.qty, 0);
+  document.getElementById('cartCount').textContent = count;
+
+  const itemsEl = document.getElementById('drawerItems');
+  if (!items.length){
+    itemsEl.innerHTML = `<div class="empty-cart">${currentLang==='ar' ? 'سلتك فارغة' : 'Your cart is empty'}</div>`;
+  } else {
+    itemsEl.innerHTML = items.map(i => `
+        <div class="drawer-item">
+          <div class="di-icon">${i.icon}</div>
+          <div>
+            <div class="di-name">${i.name}</div>
+            <div class="di-price">${fmt(i.price_cents)}</div>
+          </div>
+          <div class="di-qty">
+            <button class="add-btn" style="width:24px;height:24px;font-size:14px" onclick="changeQty(${i.product_id},-1)">−</button>
+            ${i.qty}
+            <button class="add-btn" style="width:24px;height:24px;font-size:14px" onclick="changeQty(${i.product_id},1)">+</button>
+          </div>
+        </div>`).join('');
+  }
+  document.getElementById('drawerTotal').textContent = fmt(CART.total_cents || 0);
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function openDrawer(){
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+}
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+document.getElementById('cartBtn').onclick = openDrawer;
+document.getElementById('drawerClose').onclick = closeDrawer;
+document.getElementById('overlay').onclick = closeDrawer;
+
+document.getElementById('langBtn').onclick = () => {
+  currentLang = currentLang === 'en' ? 'ar' : 'en';
+  document.documentElement.lang = currentLang;
+  document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+  document.getElementById('langBtn').textContent = currentLang === 'ar' ? 'English' : 'عربي';
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.innerHTML = currentLang === 'ar' ? el.dataset.ar : el.dataset.en;
+  });
+  renderCart();
+};
+
+loadProducts();
+loadCart();
+</script>
+
+</body>
+</html>
